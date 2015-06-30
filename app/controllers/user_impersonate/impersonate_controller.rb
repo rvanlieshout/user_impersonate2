@@ -34,16 +34,16 @@ module UserImpersonate
     # DELETE /impersonation/revert
     def destroy
       unless current_staff_user
-        flash[:notice] = "You weren't impersonating anyone"
+        flash[:notice] = t('werent_impersonating', default: "You weren't impersonating anyone")
         redirect_on_revert and return
       end
       user = current_staff
       revert_impersonate
       if user
-        flash[:notice] = "No longer impersonating #{user}"
+        flash[:notice] = t('no_longer_impersonating', user: user, default: "No longer impersonating #{user}")
         redirect_on_revert(user)
       else
-        flash[:notice] = "No longer impersonating a user"
+        flash[:notice] = t('no_longer_impersonating_a_user', default: "No longer impersonating a user")
         redirect_on_revert
       end
     end
@@ -58,7 +58,7 @@ module UserImpersonate
 
     def current_user_must_be_staff!
       unless user_is_staff?(current_staff)
-        flash[:error] = "You don't have access to this section."
+        flash[:error] = t('access_denied', default: "You don't have access to this section.")
         redirect_to :back
       end
     rescue ActionController::RedirectBackError
